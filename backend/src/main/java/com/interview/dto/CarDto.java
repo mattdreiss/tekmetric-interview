@@ -4,12 +4,13 @@ import java.util.UUID;
 
 public record CarDto(
         UUID id,
-        String year,
+        String vin,
+        int year,
         String make,
         String model,
         String trim,
         String color,
-        String vin,
+        int mileage,
         String transmission,
         String drivetrain
 ) {

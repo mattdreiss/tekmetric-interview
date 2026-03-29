@@ -22,8 +22,11 @@ public class CarEntity {
     @UuidGenerator(style = UuidGenerator.Style.TIME)
     private UUID id;
 
-    @Column(name = "model_year", length = 4)
-    private String year;
+    @Column(length = 512)
+    private String vin;
+
+    @Column(name = "model_year")
+    private int year;
 
     @Column(length = 512)
     private String make;
@@ -37,8 +40,7 @@ public class CarEntity {
     @Column(length = 512)
     private String color;
 
-    @Column(length = 512)
-    private String vin;
+    private int mileage;
 
     private String transmission;
 

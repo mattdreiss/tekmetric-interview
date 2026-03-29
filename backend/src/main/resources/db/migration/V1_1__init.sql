@@ -1,13 +1,14 @@
-CREATE TABLE car (
-    id          UUID PRIMARY KEY,
-    model_year  VARCHAR(4),
-    make        VARCHAR(512),
-    model       VARCHAR(512),
-    trim        VARCHAR(512),
-    color       VARCHAR(512),
-    vin         VARCHAR(512),
-    transmission VARCHAR(255),
-    drivetrain  VARCHAR(255),
-    created_at  TIMESTAMP WITH TIME ZONE,
-    modified_at TIMESTAMP WITH TIME ZONE
+create table car(
+    id           uuid primary key,
+    color        varchar(512),
+    created_at   timestamp(6) with time zone,
+    drivetrain   varchar(255),
+    make         varchar(512),
+    mileage      integer,
+    model        varchar(512),
+    modified_at  timestamp(6) with time zone,
+    transmission varchar(255),
+    trim         varchar(512),
+    vin          varchar(512),
+    model_year   integer
 );

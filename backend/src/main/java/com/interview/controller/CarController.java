@@ -3,12 +3,10 @@ package com.interview.controller;
 import com.interview.dto.CarDto;
 import com.interview.service.CarService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,8 +19,23 @@ public class CarController {
         return carService.getAllCars();
     }
 
+    @GetMapping("/api/car/{id}")
+    public CarDto getCar(@PathVariable("id") final UUID id) {
+        return carService.getCar(id);
+    }
+
     @PostMapping("/api/car")
-    public CarDto addCar(@RequestBody final CarDto carDto) {
-        return carService.addCar(carDto);
+    public CarDto createCar(@RequestBody final CarDto carDto) {
+        return carService.createCar(carDto);
+    }
+
+    @PutMapping("/api/car/{id}")
+    public CarDto updateCar(@PathVariable("id") final UUID id, @RequestBody final CarDto carDto) {
+        return carService.updateCar(id, carDto);
+    }
+
+    @DeleteMapping("/api/car/{id}")
+    public void deleteCar(@PathVariable("id") final UUID id) {
+        carService.deleteCar(id);
     }
 }
