@@ -5,12 +5,12 @@ import java.util.UUID;
 public record CarDto(
         UUID id,
         String vin,
-        int year,
+        Integer year,
         String make,
         String model,
         String trim,
         String color,
-        int mileage,
+        Integer mileage,
         String transmission,
         String drivetrain
 ) {
