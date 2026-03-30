@@ -4,70 +4,13 @@
 
 This is a simple CRUD API for the management of cars.
 
-### Get All Cars
+## API Documentation
 
-Gets all the cars in the database currently.
+The API is documented via Swagger docs. Once the application is running, visit the following URL for the API contract.
 
-#### Endpoint
-`GET /api/car`
-
-### Get a Car
-
-Gets a particular car by the provided identifier.
-
-#### Endpoint
-`GET /api/car/{id}`
-
-### Create a Car
-
-Adds a new car.
-
-#### Endpoint
-`POST /api/car`
-
-#### Example request body
-```json
-{
-    "vin": "1234567890",
-    "year": 2020,
-    "make": "Acura",
-    "model": "TLX",
-    "trim": "PMC",
-    "color": "Valencia Red Pearl",
-    "mileage": 33000,
-    "transmission": "Automatic",
-    "drivetrain": "AWD"
-}
 ```
-
-### Update a Car
-
-Updates a car for the given identifier. This is an idempotent update so the full body must be included.
-
-#### Endpoint
-`PUT /api/car/{id}`
-
-#### Example request body
-```json
-{
-    "vin": "1234567890",
-    "year": 1991,
-    "make": "Honda",
-    "model": "Beat",
-    "trim": "Base",
-    "color": "Red",
-    "mileage": 94000,
-    "transmission": "Manual",
-    "drivetrain": "RWD"
-}
+http://localhost:8080/swagger-ui/index.html
 ```
-
-### Delete a Car
-
-Deletes a car for the given identifier.
-
-#### Endpoint
-`DELETE /api/car/{id}`
 
 ## Steps to get started:
 
