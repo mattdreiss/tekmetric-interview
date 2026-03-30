@@ -2,12 +2,14 @@ package com.interview.controller;
 
 import com.interview.exception.CarNotFoundException;
 import com.interview.exception.CarUpdateIdMismatchException;
+import com.interview.exception.DuplicateCarException;
 import com.interview.service.CarService;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -54,6 +56,32 @@ class GlobalExceptionHandlerTest {
             mockMvc.perform(put("/api/car/{id}", id1)
                             .contentType("application/json")
                             .content("{\"id\": \"" + id2 + "\"}"))
+                    .andExpect(status().isBadRequest());
+        }
+    }
+
+    @Nested
+    class HandleDuplicateCarException {
+
+        @Test
+        void duplicateCarOnCreateReturns400() throws Exception {
+            when(carService.createCar(any())).thenThrow(new DuplicateCarException("duplicate", new RuntimeException("test")));
+
+            mockMvc.perform(post("/api/car")
+                            .contentType("application/json")
+                            .content("{}"))
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void duplicateCarOnUpdateReturns400() throws Exception {
+            final var id = UUID.randomUUID();
+
+            when(carService.updateCar(any(), any())).thenThrow(new DuplicateCarException("duplicate", new RuntimeException("test")));
+
+            mockMvc.perform(put("/api/car/{id}", id)
+                            .contentType("application/json")
+                            .content("{}"))
                     .andExpect(status().isBadRequest());
         }
     }

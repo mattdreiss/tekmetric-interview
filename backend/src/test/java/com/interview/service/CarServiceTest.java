@@ -4,6 +4,7 @@ import com.interview.dto.CarDto;
 import com.interview.entity.CarEntity;
 import com.interview.exception.CarNotFoundException;
 import com.interview.exception.CarUpdateIdMismatchException;
+import com.interview.exception.DuplicateCarException;
 import com.interview.mapper.CarMapper;
 import com.interview.repository.CarRepository;
 import org.junit.jupiter.api.Nested;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
 import java.util.Optional;
@@ -90,13 +92,25 @@ class CarServiceTest {
             final var savedDto = buildCarDto(id);
 
             when(carMapper.toEntity(inputDto)).thenReturn(entity);
-            when(carRepository.save(entity)).thenReturn(savedEntity);
+            when(carRepository.saveAndFlush(entity)).thenReturn(savedEntity);
             when(carMapper.toDto(savedEntity)).thenReturn(savedDto);
 
             final var result = carService.createCar(inputDto);
 
             assertThat(result).isEqualTo(savedDto);
-            verify(carRepository).save(entity);
+            verify(carRepository).saveAndFlush(entity);
+        }
+
+        @Test
+        void throwsDuplicateCarExceptionOnConstraintViolation() {
+            final var inputDto = buildCarDto(null);
+            final var entity = new CarEntity();
+
+            when(carMapper.toEntity(inputDto)).thenReturn(entity);
+            when(carRepository.saveAndFlush(entity)).thenThrow(new DataIntegrityViolationException("duplicate"));
+
+            assertThatThrownBy(() -> carService.createCar(inputDto))
+                    .isInstanceOf(DuplicateCarException.class);
         }
     }
 
@@ -112,14 +126,14 @@ class CarServiceTest {
             final var updatedDto = buildCarDto(id);
 
             when(carRepository.findById(id)).thenReturn(Optional.of(existingEntity));
-            when(carRepository.save(existingEntity)).thenReturn(updatedEntity);
+            when(carRepository.saveAndFlush(existingEntity)).thenReturn(updatedEntity);
             when(carMapper.toDto(updatedEntity)).thenReturn(updatedDto);
 
             final var result = carService.updateCar(id, inputDto);
 
             assertThat(result).isEqualTo(updatedDto);
             verify(carMapper).updateEntityFromDto(inputDto, existingEntity);
-            verify(carRepository).save(existingEntity);
+            verify(carRepository).saveAndFlush(existingEntity);
         }
 
         @Test
@@ -131,14 +145,14 @@ class CarServiceTest {
             final var updatedDto = buildCarDto(id);
 
             when(carRepository.findById(id)).thenReturn(Optional.of(existingEntity));
-            when(carRepository.save(existingEntity)).thenReturn(updatedEntity);
+            when(carRepository.saveAndFlush(existingEntity)).thenReturn(updatedEntity);
             when(carMapper.toDto(updatedEntity)).thenReturn(updatedDto);
 
             final var result = carService.updateCar(id, inputDto);
 
             assertThat(result).isEqualTo(updatedDto);
             verify(carMapper).updateEntityFromDto(inputDto, existingEntity);
-            verify(carRepository).save(existingEntity);
+            verify(carRepository).saveAndFlush(existingEntity);
         }
 
         @Test
@@ -162,6 +176,19 @@ class CarServiceTest {
                     .isInstanceOf(CarUpdateIdMismatchException.class);
 
             verifyNoInteractions(carRepository);
+        }
+
+        @Test
+        void throwsDuplicateCarExceptionOnConstraintViolation() {
+            final var id = UUID.randomUUID();
+            final var inputDto = buildCarDto(null);
+            final var existingEntity = new CarEntity();
+
+            when(carRepository.findById(id)).thenReturn(Optional.of(existingEntity));
+            when(carRepository.saveAndFlush(existingEntity)).thenThrow(new DataIntegrityViolationException("duplicate"));
+
+            assertThatThrownBy(() -> carService.updateCar(id, inputDto))
+                    .isInstanceOf(DuplicateCarException.class);
         }
     }
 

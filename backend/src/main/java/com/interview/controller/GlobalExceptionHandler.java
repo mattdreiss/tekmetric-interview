@@ -2,6 +2,7 @@ package com.interview.controller;
 
 import com.interview.exception.CarNotFoundException;
 import com.interview.exception.CarUpdateIdMismatchException;
+import com.interview.exception.DuplicateCarException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CarUpdateIdMismatchException.class)
     public ResponseEntity<String> handleCarUpdateIdMismatchException(CarUpdateIdMismatchException ex) {
+        log.warn(ex.getMessage(), ex);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DuplicateCarException.class)
+    public ResponseEntity<String> handleDuplicateCarException(DuplicateCarException ex) {
         log.warn(ex.getMessage(), ex);
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }

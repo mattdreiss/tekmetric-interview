@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface CarRepository extends CrudRepository<CarEntity, UUID> {
 
     List<CarEntity> findAll();
+
+    CarEntity saveAndFlush(final CarEntity carEntity);
 }

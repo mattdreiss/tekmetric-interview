@@ -12,3 +12,6 @@ create table car(
     vin          varchar(512),
     model_year   integer
 );
+
+alter table car
+add constraint uk_vin unique (vin);

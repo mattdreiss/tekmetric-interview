@@ -22,7 +22,7 @@ public class CarEntity {
     @UuidGenerator(style = UuidGenerator.Style.TIME)
     private UUID id;
 
-    @Column(length = 512)
+    @Column(length = 512, unique = true)
     private String vin;
 
     @Column(name = "model_year")
