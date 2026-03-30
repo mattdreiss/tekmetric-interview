@@ -23,7 +23,7 @@ public class CarController {
 
     @Operation(summary = "Get a single car", description = "Returns that car if it currently exists")
     @GetMapping("/api/car/{id}")
-    public CarDto getCar(@PathVariable("id") final UUID id) {
+    public CarDto getCar(@PathVariable final UUID id) {
         return carService.getCar(id);
     }
 
@@ -35,13 +35,13 @@ public class CarController {
 
     @Operation(summary = "Updates a car", description = "Updates the information about a car")
     @PutMapping("/api/car/{id}")
-    public CarDto updateCar(@PathVariable("id") final UUID id, @RequestBody final CarDto carDto) {
+    public CarDto updateCar(@PathVariable final UUID id, @RequestBody final CarDto carDto) {
         return carService.updateCar(id, carDto);
     }
 
     @Operation(summary = "Deletes a car", description = "Deletes a car by ID")
     @DeleteMapping("/api/car/{id}")
-    public void deleteCar(@PathVariable("id") final UUID id) {
+    public void deleteCar(@PathVariable final UUID id) {
         carService.deleteCar(id);
     }
 }
